@@ -17,9 +17,8 @@ class ThemoviedbDatasource extends MoviesDatasource {
     ),
   );
 
-  @override
-  Future<List<MovieEntity>> getNowPlaying({int page = 1}) async {
-    final res = await dio.get('/movie/now_playing');
+  Future<List<MovieEntity>> movieResInterface(String apiReq, int? page) async {
+    final res = await dio.get(apiReq, queryParameters: {'page': page});
 
     final ThemoviedbResponse themoviedbResponse = ThemoviedbResponse.fromJson(
       res.data,
@@ -32,4 +31,20 @@ class ThemoviedbDatasource extends MoviesDatasource {
 
     return movies;
   }
+
+  @override
+  Future<List<MovieEntity>> getNowPlaying({int page = 1}) async =>
+      await movieResInterface('/movie/now_playing', page);
+
+  @override
+  Future<List<MovieEntity>> getPopular({int page = 1}) async =>
+      await movieResInterface('/movie/popular', page);
+
+  @override
+  Future<List<MovieEntity>> getTopRated({int page = 1}) async =>
+      await movieResInterface('/movie/top_rated', page);
+
+  @override
+  Future<List<MovieEntity>> getUpcoming({int page = 1}) async =>
+      await movieResInterface('/movie/upcoming', page);
 }

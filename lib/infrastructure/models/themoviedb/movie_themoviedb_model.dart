@@ -8,7 +8,7 @@ class MovieThemoviedbModel {
   final String overview;
   final double popularity;
   final String posterPath;
-  final DateTime releaseDate;
+  final DateTime? releaseDate;
   final String title;
   final bool video;
   final double voteAverage;
@@ -42,7 +42,7 @@ class MovieThemoviedbModel {
         overview: json["overview"] ?? '',
         popularity: json["popularity"]?.toDouble(),
         posterPath: json["poster_path"] ?? '',
-        releaseDate: DateTime.parse(json["release_date"]),
+        releaseDate: DateTime.tryParse(json["release_date"]),
         title: json["title"],
         video: json["video"],
         voteAverage: json["vote_average"]?.toDouble(),
@@ -60,7 +60,7 @@ class MovieThemoviedbModel {
     "popularity": popularity,
     "poster_path": posterPath,
     "release_date":
-        "${releaseDate.year.toString().padLeft(4, '0')}-${releaseDate.month.toString().padLeft(2, '0')}-${releaseDate.day.toString().padLeft(2, '0')}",
+        "${releaseDate?.year.toString().padLeft(4, '0')}-${releaseDate?.month.toString().padLeft(2, '0')}-${releaseDate?.day.toString().padLeft(2, '0')}",
     "title": title,
     "video": video,
     "vote_average": voteAverage,

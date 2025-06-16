@@ -1,5 +1,6 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cinemapedia/config/constants/slide_style.dart';
 import 'package:flutter_cinemapedia/domain/entities/movie_entity.dart';
 
 class MoviesSlideshow extends StatelessWidget {
@@ -38,21 +39,10 @@ class _Slide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final decoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(20),
-      boxShadow: [
-        const BoxShadow(
-          color: Colors.black45,
-          blurRadius: 10,
-          offset: Offset(0, 10),
-        ),
-      ],
-    );
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
       child: DecoratedBox(
-        decoration: decoration,
+        decoration: SlideStyle.slideDecoration,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Image.network(
@@ -60,12 +50,7 @@ class _Slide extends StatelessWidget {
             fit: BoxFit.cover,
             loadingBuilder: (context, child, loadingProgress) {
               if (loadingProgress != null) {
-                return DecoratedBox(
-                  decoration: decoration,
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.cumulativeBytesLoaded.ceilToDouble(),
-                  ),
-                );
+                return SlideStyle.slideLoading;
               }
               return child;
             },

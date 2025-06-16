@@ -4,6 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final moviesSlideshowProvider = Provider<List<MovieEntity>>((ref) {
   final movies = ref.watch(nowPlayingMoviesProvider);
-
-  return movies.sublist(0, 6);
+  if (movies.isNotEmpty) {
+    final filteredMovies = movies.sublist(0, 6);
+    return filteredMovies;
+  }
+  return movies;
 });
