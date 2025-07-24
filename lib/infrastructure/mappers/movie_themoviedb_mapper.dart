@@ -1,5 +1,5 @@
 import 'package:flutter_cinemapedia/domain/entities/movie_entity.dart';
-import 'package:flutter_cinemapedia/infrastructure/models/themoviedb/movie_themoviedb_model.dart';
+import 'package:flutter_cinemapedia/infrastructure/models/models.dart';
 
 /// Se encarga de leer modelos para transformarlos en entidades
 class MovieThemoviedbMapper {
@@ -26,5 +26,30 @@ class MovieThemoviedbMapper {
     video: movieThemoviedbModel.video,
     voteAverage: movieThemoviedbModel.voteAverage,
     voteCount: movieThemoviedbModel.voteCount,
+  );
+
+  static MovieEntity movieDetailThemoviedbToEntity(
+    MovieDetailsThemoviedbModel movieDetailThemoviedbModel,
+  ) => MovieEntity(
+    adult: movieDetailThemoviedbModel.adult,
+    backdropPath:
+        (movieDetailThemoviedbModel.backdropPath != '')
+            ? 'https://image.tmdb.org/t/p/w500${movieDetailThemoviedbModel.backdropPath}'
+            : 'https://imgs.search.brave.com/9Q1bsYKqUhp7dfkwNXK7ikiKkXhBq19-ZWA3MLHQ2d8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9paDEu/cmVkYnViYmxlLm5l/dC9pbWFnZS4xMzQ5/NzQ4NzkyLjEwNjgv/ZnBvc3RlcixzbWFs/bCx3YWxsX3RleHR1/cmUsc3F1YXJlX3By/b2R1Y3QsNjAweDYw/MC51MS5qcGc',
+    genreIds: movieDetailThemoviedbModel.genres.map((e) => e.name).toList(),
+    id: movieDetailThemoviedbModel.id,
+    originalLanguage: movieDetailThemoviedbModel.originalLanguage,
+    originalTitle: movieDetailThemoviedbModel.originalTitle,
+    overview: movieDetailThemoviedbModel.overview,
+    popularity: movieDetailThemoviedbModel.popularity,
+    posterPath:
+        (movieDetailThemoviedbModel.posterPath != '')
+            ? 'https://image.tmdb.org/t/p/w500${movieDetailThemoviedbModel.posterPath}'
+            : 'https://imgs.search.brave.com/9Q1bsYKqUhp7dfkwNXK7ikiKkXhBq19-ZWA3MLHQ2d8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9paDEu/cmVkYnViYmxlLm5l/dC9pbWFnZS4xMzQ5/NzQ4NzkyLjEwNjgv/ZnBvc3RlcixzbWFs/bCx3YWxsX3RleHR1/cmUsc3F1YXJlX3By/b2R1Y3QsNjAweDYw/MC51MS5qcGc',
+    releaseDate: movieDetailThemoviedbModel.releaseDate,
+    title: movieDetailThemoviedbModel.title,
+    video: movieDetailThemoviedbModel.video,
+    voteAverage: movieDetailThemoviedbModel.voteAverage,
+    voteCount: movieDetailThemoviedbModel.voteCount,
   );
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cinemapedia/config/constants/slide_style.dart';
 import 'package:flutter_cinemapedia/config/helpers/human_format.dart';
 import 'package:flutter_cinemapedia/domain/entities/movie_entity.dart';
+import 'package:go_router/go_router.dart';
 
 class MoviesHorizontalListview extends StatelessWidget {
   final List<MovieEntity> movies;
@@ -111,7 +112,10 @@ class _Slide extends StatelessWidget {
                   if (loadingProgress != null) {
                     return SlideStyle.slideLoading;
                   }
-                  return child;
+                  return GestureDetector(
+                    onTap: () => context.push('/movie/${movie.id}'),
+                    child: child,
+                  );
                 },
               ),
             ),
