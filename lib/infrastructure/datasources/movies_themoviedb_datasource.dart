@@ -37,8 +37,15 @@ class MoviesThemoviedbDatasource extends MoviesDatasource {
   Future<MovieEntity> getMovieById(String id) async =>
       movieReqById('/movie', id);
 
-  Future<List<MovieEntity>> moviesReqByPage(String apiPath, int? page) async {
-    final res = await dio.get(apiPath, queryParameters: {'page': page});
+  Future<List<MovieEntity>> moviesReqByPage(
+    String apiPath,
+    int? page, {
+    String? query,
+  }) async {
+    final res = await dio.get(
+      apiPath,
+      queryParameters: {'page': page, 'query': query},
+    );
 
     final ThemoviedbResponse themoviedbResponse = ThemoviedbResponse.fromJson(
       res.data,
@@ -66,4 +73,8 @@ class MoviesThemoviedbDatasource extends MoviesDatasource {
 
     return movieDetail;
   }
+
+  @override
+  Future<List<MovieEntity>> getSearchMovies(String query) =>
+      moviesReqByPage('/search/movie', 1, query: query);
 }
