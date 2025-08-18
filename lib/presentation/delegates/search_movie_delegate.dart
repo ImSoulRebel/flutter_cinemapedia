@@ -8,31 +8,36 @@ typedef SearchMovieCallback = Future<List<MovieEntity>> Function(String query);
 
 class SearchMovieDelegate extends SearchDelegate<MovieEntity?> {
   final SearchMovieCallback searchMoviesCallback;
-  final List<MovieEntity> initialMovies;
+  List<MovieEntity> initialMovies;
 
   SearchMovieDelegate({
     required this.searchMoviesCallback,
     this.initialMovies = const [],
   });
 
-  StreamController<List<MovieEntity>> debouncedMovies =
+  StreamController<List<MovieEntity>> debouncedMoviesStream =
       StreamController.broadcast();
+  StreamController<bool> isLoadingStream = StreamController.broadcast();
   Timer? _debounceTimer;
 
   /// Funcion para añadir un delay a la pulsación de teclas asi evitando
   /// llamadas innecesarias
   void _onQueryChanged(String query) {
+    isLoadingStream.add(true);
+
     if (_debounceTimer?.isActive ?? false) {
       _debounceTimer?.cancel();
     }
 
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       final movies = await searchMoviesCallback(query);
-      debouncedMovies.add(movies);
+      initialMovies = movies;
+      debouncedMoviesStream.add(movies);
+      isLoadingStream.add(false);
     });
   }
 
-  onDisposeStreams() => debouncedMovies.close();
+  onDisposeStreams() => debouncedMoviesStream.close();
 
   @override
   String get searchFieldLabel => 'Buscar película';
@@ -40,9 +45,28 @@ class SearchMovieDelegate extends SearchDelegate<MovieEntity?> {
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
-      // query es una palabra reservada del searchDelegate para la caja de busqueda
-      if (query.isNotEmpty)
-        IconButton(onPressed: () => query = '', icon: Icon(Icons.clear)),
+      StreamBuilder<bool>(
+        initialData: false,
+        stream: isLoadingStream.stream,
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.data ?? false) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: Center(child: CircularProgressIndicator()),
+              ),
+            );
+          }
+
+          return
+          // query es una palabra reservada del searchDelegate para la caja de busqueda
+          query.isNotEmpty
+              ? IconButton(onPressed: () => query = '', icon: Icon(Icons.clear))
+              : SizedBox.shrink();
+        },
+      ),
     ];
   }
 
@@ -59,17 +83,20 @@ class SearchMovieDelegate extends SearchDelegate<MovieEntity?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return const Text('buildResults');
+    return _buildResultsAndSuggestions();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     _onQueryChanged(query);
+    return _buildResultsAndSuggestions();
+  }
 
+  StreamBuilder<List<MovieEntity>> _buildResultsAndSuggestions() {
     return StreamBuilder(
       // future: searchMovieCallback(query),
       initialData: initialMovies,
-      stream: debouncedMovies.stream,
+      stream: debouncedMoviesStream.stream,
       builder: (
         BuildContext context,
         AsyncSnapshot<List<MovieEntity>> snapshot,
