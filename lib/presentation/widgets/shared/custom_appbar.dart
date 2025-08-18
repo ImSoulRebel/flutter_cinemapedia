@@ -13,8 +13,6 @@ class CustomAppbar extends ConsumerWidget {
     final colors = Theme.of(context).colorScheme;
     final titleStyle = Theme.of(context).textTheme.titleMedium;
 
-    final moviesRepository = ref.read(moviesRepositoryProvider);
-
     return SafeArea(
       bottom: false,
       child: Padding(
@@ -29,17 +27,28 @@ class CustomAppbar extends ConsumerWidget {
               const Spacer(),
               IconButton(
                 icon: Icon(Icons.search),
-                onPressed:
-                    () => showSearch<MovieEntity?>(
-                      context: context,
-                      delegate: SearchMovieDelegate(
-                        searchMovieCallback: moviesRepository.getSearchMovies,
-                      ),
-                    ).then((movie) {
-                      if (movie != null && context.mounted) {
-                        context.push('/movie/${movie.id}');
-                      }
-                    }),
+                onPressed: () {
+                  final moviesRepository = ref.read(moviesRepositoryProvider);
+                  final searchQuery = ref.read(searchMoviesProvider);
+
+                  showSearch<MovieEntity?>(
+                    query: searchQuery,
+                    context: context,
+                    delegate: SearchMovieDelegate(
+                      searchMovieCallback: (query) {
+                        ref
+                            .read(searchMoviesProvider.notifier)
+                            .update((state) => query);
+
+                        return moviesRepository.getSearchMovies(query);
+                      },
+                    ),
+                  ).then((movie) {
+                    if (movie != null && context.mounted) {
+                      context.push('/movie/${movie.id}');
+                    }
+                  });
+                },
               ),
             ],
           ),
