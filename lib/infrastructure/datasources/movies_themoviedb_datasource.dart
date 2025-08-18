@@ -42,13 +42,21 @@ class MoviesThemoviedbDatasource extends MoviesDatasource {
     int? page, {
     String? query,
   }) async {
+    if (query != null && query.isEmpty) {
+      return [];
+    }
+
     final res = await dio.get(
       apiPath,
       queryParameters: {'page': page, 'query': query},
     );
 
+    return _jsonToMovies(res.data);
+  }
+
+  List<MovieEntity> _jsonToMovies(Map<String, dynamic> json) {
     final ThemoviedbResponse themoviedbResponse = ThemoviedbResponse.fromJson(
-      res.data,
+      json,
     );
 
     final List<MovieEntity> movies =

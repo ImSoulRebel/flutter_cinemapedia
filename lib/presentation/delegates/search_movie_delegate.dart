@@ -7,12 +7,17 @@ import 'package:flutter_cinemapedia/domain/entities/movie_entity.dart';
 typedef SearchMovieCallback = Future<List<MovieEntity>> Function(String query);
 
 class SearchMovieDelegate extends SearchDelegate<MovieEntity?> {
-  final SearchMovieCallback searchMovieCallback;
+  final SearchMovieCallback searchMoviesCallback;
+  final List<MovieEntity> initialMovies;
+
+  SearchMovieDelegate({
+    required this.searchMoviesCallback,
+    this.initialMovies = const [],
+  });
+
   StreamController<List<MovieEntity>> debouncedMovies =
       StreamController.broadcast();
   Timer? _debounceTimer;
-
-  SearchMovieDelegate({required this.searchMovieCallback});
 
   /// Funcion para añadir un delay a la pulsación de teclas asi evitando
   /// llamadas innecesarias
@@ -22,12 +27,8 @@ class SearchMovieDelegate extends SearchDelegate<MovieEntity?> {
     }
 
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
-      if (query.isEmpty) {
-        debouncedMovies.add([]);
-      } else {
-        final movies = await searchMovieCallback(query);
-        debouncedMovies.add(movies);
-      }
+      final movies = await searchMoviesCallback(query);
+      debouncedMovies.add(movies);
     });
   }
 
@@ -67,6 +68,7 @@ class SearchMovieDelegate extends SearchDelegate<MovieEntity?> {
 
     return StreamBuilder(
       // future: searchMovieCallback(query),
+      initialData: initialMovies,
       stream: debouncedMovies.stream,
       builder: (
         BuildContext context,
