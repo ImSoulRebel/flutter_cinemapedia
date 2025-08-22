@@ -1,8 +1,14 @@
+import 'package:isar/isar.dart';
+
+part 'movie_entity.g.dart';
+
+@collection
 class MovieEntity {
+  final Id? isarId;
+  final int id;
   final bool adult;
   final String backdropPath;
   final List<String> genreIds;
-  final int id;
   final String originalLanguage;
   final String originalTitle;
   final String overview;
@@ -15,6 +21,7 @@ class MovieEntity {
   final int voteCount;
 
   MovieEntity({
+    this.isarId,
     required this.adult,
     required this.backdropPath,
     required this.genreIds,

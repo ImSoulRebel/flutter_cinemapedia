@@ -87,7 +87,6 @@ class _CustomSliverDetail extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.all(8),
-
               child: Wrap(
                 spacing: 10,
                 children: [
@@ -177,13 +176,15 @@ class _CustomSliverAppbar extends StatelessWidget {
       expandedHeight: size.height * 0.7,
       backgroundColor: Colors.black,
       foregroundColor: Colors.white,
+      actions: [
+        // IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
+        IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.favorite_outlined, color: Colors.red),
+        ),
+      ],
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        // title: Text(
-        //   movie.title,
-        //   style: TextStyle(color: Colors.white, fontSize: 20),
-        //   textAlign: TextAlign.start,
-        // ),
         background: Stack(
           children: [
             SizedBox.expand(
@@ -195,32 +196,62 @@ class _CustomSliverAppbar extends StatelessWidget {
                         loadingProgress != null ? SizedBox() : child,
               ),
             ),
-            SizedBox.expand(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0.7, 1.0],
-                    colors: [Colors.transparent, Colors.black87],
-                  ),
-                ),
-              ),
+            _CustomShadowGradient(),
+            _CustomShadowGradient(
+              gradient: _ShadowGradient.bottomLeftToTopRight,
             ),
-            SizedBox.expand(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomRight,
-                    end: Alignment.topLeft,
-                    stops: [0.8, 1.0],
-                    colors: [Colors.transparent, Colors.black87],
-                  ),
-                ),
-              ),
+            _CustomShadowGradient(
+              gradient: _ShadowGradient.bottomRightToTopLeft,
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+enum _ShadowGradient {
+  topToBottom,
+  // bottomToTop,
+  // leftToRight,
+  // rightToLeft,
+  // topLeftToBottomRight,
+  // topRightToBottomLeft,
+  bottomLeftToTopRight,
+  bottomRightToTopLeft,
+}
+
+class _CustomShadowGradient extends StatelessWidget {
+  final _ShadowGradient gradient;
+
+  const _CustomShadowGradient({this.gradient = _ShadowGradient.topToBottom});
+
+  Gradient gradientResult() => switch (gradient) {
+    _ShadowGradient.topToBottom => LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      stops: [0.7, 1.0],
+      colors: [Colors.transparent, Colors.black87],
+    ),
+    _ShadowGradient.bottomLeftToTopRight => LinearGradient(
+      begin: Alignment.bottomLeft,
+      end: Alignment.topRight,
+      stops: [0.8, 1.0],
+      colors: [Colors.transparent, Colors.black87],
+    ),
+    _ShadowGradient.bottomRightToTopLeft => LinearGradient(
+      begin: Alignment.bottomRight,
+      end: Alignment.topLeft,
+      stops: [0.8, 1.0],
+      colors: [Colors.transparent, Colors.black87],
+    ),
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: DecoratedBox(
+        decoration: BoxDecoration(gradient: gradientResult()),
       ),
     );
   }
