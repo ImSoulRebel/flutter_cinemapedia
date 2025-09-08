@@ -4,7 +4,7 @@ part 'movie_entity.g.dart';
 
 @collection
 class MovieEntity {
-  final Id? isarId;
+  Id? isarId;
   final int id;
   final bool adult;
   final String backdropPath;
@@ -21,7 +21,6 @@ class MovieEntity {
   final int voteCount;
 
   MovieEntity({
-    this.isarId,
     required this.adult,
     required this.backdropPath,
     required this.genreIds,

@@ -66,9 +66,12 @@ class _CustomSliverDetail extends StatelessWidget {
                 children: [
                   Flexible(
                     flex: 1,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.network(movieDetail.posterPath),
+                    child: Hero(
+                      tag: movieDetail.id,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.network(movieDetail.posterPath),
+                      ),
                     ),
                   ),
                   Flexible(
@@ -163,13 +166,16 @@ class _ActorsByMovieListview extends ConsumerWidget {
   }
 }
 
-class _CustomSliverAppbar extends StatelessWidget {
+class _CustomSliverAppbar extends ConsumerWidget {
   final MovieEntity movie;
   const _CustomSliverAppbar(this.movie);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
+    final isFavouriteAsync = ref.watch(
+      localStorageisFavouriteMovieProvider(movie.id),
+    );
 
     return SliverAppBar(
       floating: true,
@@ -177,10 +183,25 @@ class _CustomSliverAppbar extends StatelessWidget {
       backgroundColor: Colors.black,
       foregroundColor: Colors.white,
       actions: [
-        // IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
         IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.favorite_outlined, color: Colors.red),
+          onPressed: () async {
+            await ref
+                .read(favouriteMoviesProvider.notifier)
+                .toggleFavourite(movie);
+
+            /// invalidando el estado de este provider lo regresamos a su estado
+            /// inicial obligando al rebuild
+            ref.invalidate(localStorageisFavouriteMovieProvider(movie.id));
+          },
+          icon: isFavouriteAsync.when(
+            data:
+                (bool isFavourite) =>
+                    isFavourite
+                        ? Icon(Icons.favorite_outlined, color: Colors.red)
+                        : Icon(Icons.favorite_border),
+            loading: () => Icon(Icons.favorite_outlined, color: Colors.grey),
+            error: (_, __) => throw UnimplementedError(),
+          ),
         ),
       ],
       flexibleSpace: FlexibleSpaceBar(

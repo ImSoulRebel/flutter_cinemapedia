@@ -168,6 +168,7 @@ MovieEntity _movieEntityDeserialize(
     voteAverage: reader.readDouble(offsets[12]),
     voteCount: reader.readLong(offsets[13]),
   );
+  object.isarId = id;
   return object;
 }
 
@@ -220,7 +221,9 @@ List<IsarLinkBase<dynamic>> _movieEntityGetLinks(MovieEntity object) {
 }
 
 void _movieEntityAttach(
-    IsarCollection<dynamic> col, Id id, MovieEntity object) {}
+    IsarCollection<dynamic> col, Id id, MovieEntity object) {
+  object.isarId = id;
+}
 
 extension MovieEntityQueryWhereSort
     on QueryBuilder<MovieEntity, MovieEntity, QWhere> {
