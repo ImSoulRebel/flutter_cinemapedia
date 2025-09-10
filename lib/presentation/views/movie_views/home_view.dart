@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cinemapedia/presentation/providers/providers.dart';
-import 'package:flutter_cinemapedia/presentation/widgets/shared/loading_view.dart';
 import 'package:flutter_cinemapedia/presentation/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

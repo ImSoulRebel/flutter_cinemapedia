@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_cinemapedia/config/constants/environment.dart';
-import 'package:flutter_cinemapedia/domain/datasources/movies_datasource.dart';
-import 'package:flutter_cinemapedia/domain/entities/movie_entity.dart';
-import 'package:flutter_cinemapedia/infrastructure/mappers/movie_themoviedb_mapper.dart';
-import 'package:flutter_cinemapedia/infrastructure/models/models.dart';
+import 'package:flutter_cinemapedia/domain/domain.dart';
+import 'package:flutter_cinemapedia/infrastructure/infrastructure.dart';
 
 class MoviesThemoviedbDatasource extends MoviesDatasource {
   /// Se configura aquí porque es propio de este Datasource
@@ -85,4 +83,26 @@ class MoviesThemoviedbDatasource extends MoviesDatasource {
   @override
   Future<List<MovieEntity>> getSearchMovies(String query) =>
       moviesReqByPage('/search/movie', 1, query: query);
+
+  @override
+  Future<List<MovieEntity>> getSimilarMovies(int movieId) async {
+    final response = await dio.get('/movie/$movieId/similar');
+    return _jsonToMovies(response.data);
+  }
+
+  @override
+  Future<List<VideoEntity>> getYoutubeVideosById(int movieId) async {
+    final response = await dio.get('/movie/$movieId/videos');
+    final moviedbVideosReponse = MoviedbVideosResponse.fromJson(response.data);
+    final videos = <VideoEntity>[];
+
+    for (final moviedbVideo in moviedbVideosReponse.results) {
+      if (moviedbVideo.site == 'YouTube') {
+        final video = VideoMapper.moviedbVideoToEntity(moviedbVideo);
+        videos.add(video);
+      }
+    }
+
+    return videos;
+  }
 }

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class CustomBottomNavigationbar extends StatelessWidget {
-  const CustomBottomNavigationbar({super.key});
+class CustomBottomNavigationBar extends StatelessWidget {
+  const CustomBottomNavigationBar({super.key});
 
   static const List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home_max)),
     BottomNavigationBarItem(
-      label: 'Categorías',
-      icon: Icon(Icons.label_outline),
+      label: 'Populares',
+      icon: Icon(Icons.thumbs_up_down_outlined),
     ),
     BottomNavigationBarItem(
       label: 'Favoritos',
-      icon: Icon(Icons.favorite_border_outlined),
+      icon: Icon(Icons.favorite_outlined),
     ),
   ];
 
@@ -21,7 +21,7 @@ class CustomBottomNavigationbar extends StatelessWidget {
     final String location = GoRouterState.of(context).matchedLocation;
     return switch (location) {
       '/' => 0,
-      '/categories' => 1,
+      '/popular' => 1,
       '/favourites' => 2,
       _ => 0,
     };
@@ -33,7 +33,7 @@ class CustomBottomNavigationbar extends StatelessWidget {
         context.go('/');
         break;
       case 1:
-        context.go('/');
+        context.go('/popular');
         break;
       case 2:
         context.go('/favourites');

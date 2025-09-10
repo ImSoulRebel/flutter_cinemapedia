@@ -68,4 +68,11 @@ class IsarLocalStorageDatasource extends LocalStorageDatasource {
     /// Insertar
     isar.writeTxnSync(() => isar.movieEntitys.putSync(movie));
   }
+
+  // @override
+  // Future<List<MovieEntity>> loadMovies({int limit = 10, offset = 0}) async {
+  //   final isar = await db;
+
+  //   return isar.movieEntitys.where().offset(offset).limit(limit).findAll();
+  // }
 }

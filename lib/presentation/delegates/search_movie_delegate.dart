@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_cinemapedia/config/helpers/human_format.dart';
 import 'package:flutter_cinemapedia/domain/entities/movie_entity.dart';
+import 'package:flutter_cinemapedia/presentation/widgets/movies/movies_rating.dart';
 
 typedef SearchMovieCallback = Future<List<MovieEntity>> Function(String query);
 
@@ -138,7 +138,14 @@ class _MovieItem extends StatelessWidget {
             Flexible(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: Image.network(movie.posterPath),
+                child: FadeInImage(
+                  height: 130,
+                  fit: BoxFit.cover,
+                  image: NetworkImage(movie.posterPath),
+                  placeholder: const AssetImage(
+                    'assets/loaders/bottle-loader.gif',
+                  ),
+                ),
               ),
             ),
             Flexible(
@@ -153,20 +160,7 @@ class _MovieItem extends StatelessWidget {
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.star_half_rounded,
-                        color: Colors.yellow.shade800,
-                      ),
-                      Text(
-                        HumanFormat.number(movie.voteAverage, decimalDigits: 1),
-                        style: textStyle.bodyMedium?.copyWith(
-                          color: Colors.yellow.shade900,
-                        ),
-                      ),
-                    ],
-                  ),
+                  MoviesRating(voteAverage: movie.voteAverage),
                 ],
               ),
             ),

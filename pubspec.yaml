@@ -7,6 +7,7 @@ environment:
   sdk: ^3.7.0
 
 dependencies:
+  animate_do: ^4.2.0
   card_swiper: ^3.0.1
   dio: ^5.8.0+1
   flutter:
@@ -19,6 +20,7 @@ dependencies:
   isar: ^3.1.0+1
   isar_flutter_libs: ^3.1.0+1
   path_provider: ^2.1.5
+  youtube_player_flutter: ^9.1.2
 
 dev_dependencies:
   analyzer: 5.13.0
@@ -33,3 +35,4 @@ flutter:
 
   assets:
     - .env
+    - assets/loaders/

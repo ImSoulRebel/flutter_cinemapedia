@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cinemapedia/config/constants/slide_style.dart';
 import 'package:flutter_cinemapedia/config/helpers/human_format.dart';
 import 'package:flutter_cinemapedia/domain/entities/movie_entity.dart';
+import 'package:flutter_cinemapedia/presentation/presentation.dart';
 import 'package:go_router/go_router.dart';
 
 class MoviesHorizontalListview extends StatelessWidget {
@@ -25,6 +26,7 @@ class MoviesHorizontalListview extends StatelessWidget {
       child: SizedBox(
         height: 350,
         child: Column(
+          spacing: 8,
           children: [
             if (title != null && title!.isNotEmpty)
               _LeadingLabel(title: title!, subtitle: subtitle),
@@ -93,7 +95,6 @@ class _Slide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme;
-    final voteAverageColor = Colors.yellow.shade800;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8),
@@ -124,13 +125,7 @@ class _Slide extends StatelessWidget {
             Row(
               spacing: 4,
               children: [
-                Icon(Icons.star_half_outlined, color: voteAverageColor),
-                Text(
-                  movie.voteAverage.toString(),
-                  style: textStyle.bodyMedium?.copyWith(
-                    color: voteAverageColor,
-                  ),
-                ),
+                MoviesRating(voteAverage: movie.voteAverage),
                 Spacer(),
                 Text(
                   HumanFormat.number(movie.popularity),

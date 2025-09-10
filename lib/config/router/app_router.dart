@@ -33,6 +33,15 @@ final appRouter = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
+              path: '/popular',
+              name: PopularView.name,
+              builder: (context, state) => PopularView(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
               path: '/favourites',
               name: FavouritesView.name,
               builder: (context, state) => FavouritesView(),
