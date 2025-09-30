@@ -56,9 +56,11 @@ class _FavouritesViewState extends ConsumerState<FavouritesView> {
     }
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: MovieMasonry(movies: favMovies, loadNextPage: loadNextPage),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: MovieMasonry(movies: favMovies, loadNextPage: loadNextPage),
+        ),
       ),
     );
   }

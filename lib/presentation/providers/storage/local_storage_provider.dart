@@ -1,8 +1,9 @@
+import 'package:flutter_cinemapedia/infrastructure/datasources/drift_local_storage_datasource.dart';
 import 'package:flutter_cinemapedia/infrastructure/infrastructure.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final localStorageRepositoryProvider = Provider(
-  (ref) => LocalStorageRepositoryImpl(IsarLocalStorageDatasource()),
+  (ref) => LocalStorageRepositoryImpl(DriftLocalStorageDatasource()),
 );
 
 /// El [.family] permite recibir argumentos

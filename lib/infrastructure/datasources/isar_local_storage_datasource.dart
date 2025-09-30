@@ -1,78 +1,85 @@
-import 'package:flutter_cinemapedia/domain/datasources/local_storage_datasource.dart';
-import 'package:flutter_cinemapedia/domain/entities/movie_entity.dart';
-import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
+/// This is a basic implementation of a local storage datasource using Isar.
+/// It provides methods to get favourite movies, check if a movie is favourite,
+/// and toggle a movie as favourite.
+/// Note: Changed for Drift implementation (see lib/config/database/database.dart)
 
-class IsarLocalStorageDatasource extends LocalStorageDatasource {
-  late Future<Isar> db;
+// import 'package:flutter_cinemapedia/domain/datasources/local_storage_datasource.dart';
+// import 'package:flutter_cinemapedia/domain/entities/movie_entity.dart';
+// import 'package:isar/isar.dart';
+// import 'package:path_provider/path_provider.dart';
 
-  IsarLocalStorageDatasource() {
-    db = openDB();
-  }
+// class IsarLocalStorageDatasource extends LocalStorageDatasource {
+//   late Future<Isar> db;
 
-  Future<Isar> openDB() async {
-    ///  PATH donde almacenaremos la base de datos
-    final dir = await getApplicationDocumentsDirectory();
+//   IsarLocalStorageDatasource() {
+//     db = openDB();
+//   }
 
-    if (Isar.instanceNames.isEmpty) {
-      return await Isar.open(
-        [MovieEntitySchema],
-        inspector: true,
-        directory: dir.path,
-      );
-    }
-    return Future.value(Isar.getInstance());
-  }
+//   Future<Isar> openDB() async {
+//     ///  PATH donde almacenaremos la base de datos
+//     final dir = await getApplicationDocumentsDirectory();
 
-  /// Paginado
-  @override
-  Future<List<MovieEntity>> getFavouritesMovies({
-    int limit = 10,
-    int offset = 0,
-  }) async {
-    final isar = await db;
+//     if (Isar.instanceNames.isEmpty) {
+//       return await Isar.open(
+//         [MovieEntitySchema],
+//         inspector: true,
+//         directory: dir.path,
+//       );
+//     }
+//     return Future.value(Isar.getInstance());
+//   }
 
-    return await isar.movieEntitys
-        .where()
-        .offset(offset)
-        .limit(limit)
-        .findAll();
-  }
+//   /// Paginado
+//   @override
+//   Future<List<MovieEntity>> getFavouritesMovies({
+//     int limit = 10,
+//     int offset = 0,
+//   }) async {
+//     final isar = await db;
 
-  @override
-  Future<bool> isMovieFavourite(int movieId) async {
-    final isar = await db;
+//     return await isar.movieEntitys
+//         .where()
+//         .offset(offset)
+//         .limit(limit)
+//         .findAll();
+//   }
 
-    final isFavouriteMovie =
-        await isar.movieEntitys.filter().idEqualTo(movieId).findFirst();
+//   @override
+//   Future<bool> isMovieFavourite(int movieId) async {
+//     final isar = await db;
 
-    return isFavouriteMovie != null;
-  }
+//     final isFavouriteMovie =
+//         await isar.movieEntitys.filter().idEqualTo(movieId).findFirst();
 
-  @override
-  Future<void> toggleFavourite(MovieEntity movie) async {
-    final isar = await db;
+//     return isFavouriteMovie != null;
+//   }
 
-    final favouriteMovie =
-        await isar.movieEntitys.filter().idEqualTo(movie.id).findFirst();
+//   @override
+//   Future<void> toggleFavourite(MovieEntity movie) async {
+//     final isar = await db;
 
-    if (favouriteMovie != null) {
-      /// Transacción con BBDD
-      isar.writeTxnSync(
-        /// Borrar
-        () => isar.movieEntitys.deleteSync(favouriteMovie.isarId!),
-      );
-      return;
-    }
+//     final favouriteMovie =
+//         await isar.movieEntitys.filter().idEqualTo(movie.id).findFirst();
 
-    /// Insertar
-    isar.writeTxnSync(() => isar.movieEntitys.putSync(movie));
-  }
+//     if (favouriteMovie != null) {
+//       /// Transacción con BBDD
+//       isar.writeTxnSync(
+//         /// Borrar
+//         () => isar.movieEntitys.deleteSync(favouriteMovie.isarId!),
+//       );
+//       return;
+//     }
 
-  // @override
-  // Future<List<MovieEntity>> loadMovies({int limit = 10, offset = 0}) async {
-  //   final isar = await db;
+//     /// Insertar
+//     isar.writeTxnSync(() => isar.movieEntitys.putSync(movie));
+//   }
 
-  //   return isar.movieEntitys.where().offset(offset).limit(limit).findAll();
-  // }
-}
+//   // @override
+//   // Future<List<MovieEntity>> loadMovies({int limit = 10, offset = 0}) async {
+//   //   final isar = await db;
+
+// ignore_for_file: dangling_library_doc_comments
+
+//   //   return isar.movieEntitys.where().offset(offset).limit(limit).findAll();
+//   // }
+// }

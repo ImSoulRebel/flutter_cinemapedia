@@ -1,10 +1,10 @@
-import 'package:isar/isar.dart';
+// import 'package:isar/isar.dart';
 
-part 'movie_entity.g.dart';
+// part 'movie_entity.g.dart';
 
-@collection
+// @collection
 class MovieEntity {
-  Id? isarId;
+  // Id? isarId;
   final int id;
   final bool adult;
   final String backdropPath;
