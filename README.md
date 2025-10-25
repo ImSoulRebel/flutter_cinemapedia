@@ -40,3 +40,11 @@ flutter pub run build_runner build --delete-conflicting-outputs
 
 - [Documentación oficial de Flutter](https://flutter.dev/docs)
 - [The MovieDB API](https://developers.themoviedb.org/3)
+
+# Prod
+
+Para cambiar el nombre del bundle de la App:
+
+```
+dart run change_app_package_name:main com.tudominio.package.appname
+```
