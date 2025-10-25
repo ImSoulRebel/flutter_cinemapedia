@@ -116,7 +116,15 @@ class _TitleAndOverview extends StatelessWidget {
               tag: movieDetail.id,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: Image.network(movieDetail.posterPath),
+                child: Image.network(
+                  movieDetail.posterPath,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      'assets/images/no-image.jpg',
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -173,6 +181,14 @@ class _ActorsByMovieListview extends ConsumerWidget {
                         height: 180,
                         width: 135,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'assets/images/no-image.jpg',
+                            height: 180,
+                            width: 135,
+                            fit: BoxFit.cover,
+                          );
+                        },
                       ),
                     ),
                     Text(actor.name),
@@ -229,7 +245,7 @@ class _CustomSliverAppbar extends ConsumerWidget {
                         ? Icon(Icons.favorite_outlined, color: Colors.red)
                         : Icon(Icons.favorite_border),
             loading: () => const CircularProgressIndicator(strokeWidth: 2),
-            error: (_, __) => throw UnimplementedError(),
+            error: (_, _) => throw UnimplementedError(),
           ),
         ),
       ],
@@ -248,6 +264,12 @@ class _CustomSliverAppbar extends ConsumerWidget {
                 loadingBuilder:
                     (context, child, loadingProgress) =>
                         loadingProgress != null ? SizedBox() : child,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/images/no-image.jpg',
+                    fit: BoxFit.cover,
+                  );
+                },
               ),
             ),
             // _CustomShadowGradient(),

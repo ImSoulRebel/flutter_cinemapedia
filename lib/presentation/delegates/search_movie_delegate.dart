@@ -37,7 +37,7 @@ class SearchMovieDelegate extends SearchDelegate<MovieEntity?> {
     });
   }
 
-  onDisposeStreams() => debouncedMoviesStream.close();
+  Future onDisposeStreams() => debouncedMoviesStream.close();
 
   @override
   String get searchFieldLabel => 'Buscar película';

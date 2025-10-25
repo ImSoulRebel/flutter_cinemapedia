@@ -23,7 +23,7 @@ class VideosFromMovie extends ConsumerWidget {
     return moviesFromVideo.when(
       data: (videos) => _VideosList(videos: videos),
       error:
-          (_, __) => const Center(
+          (_, _) => const Center(
             child: Text('No se pudo cargar películas similares'),
           ),
       loading:
@@ -53,6 +53,23 @@ class _VideosList extends StatelessWidget {
           child: const Text(
             'Videos',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+
+        //* Ejemplo de imagen con manejo de error
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          child: Image.network(
+            'https://image.tmdb.org/t/p/w500/ccq2QyASGGltklwtCH0aBgM8whT.jpg',
+            errorBuilder: (context, error, stackTrace) {
+              return Image.asset(
+                'assets/images/no-image.jpg',
+                height: 200,
+                fit: BoxFit.cover,
+              );
+            },
+            height: 200,
+            fit: BoxFit.cover,
           ),
         ),
 
