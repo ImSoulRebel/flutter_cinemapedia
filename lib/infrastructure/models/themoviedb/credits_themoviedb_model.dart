@@ -1,5 +1,9 @@
 class CreditsThemoviedbModel {
-  CreditsThemoviedbModel({required this.id, required this.cast, required this.crew});
+  CreditsThemoviedbModel({
+    required this.id,
+    required this.cast,
+    required this.crew,
+  });
 
   final int id;
   final List<Cast> cast;
